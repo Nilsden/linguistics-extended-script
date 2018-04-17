@@ -1,0 +1,35 @@
+.entityItem{
+    display: block;
+    cursor: pointer;
+}
+.entitiesHR{
+    margin: 7px 0px 2px 0px;
+}
+.entitiesCloseButton{
+    width: 100%;
+}
+h5::before {
+    display: block;
+    content: " ";
+    margin-top: -34px;
+    height: 34px;
+    visibility: hidden;
+    pointer-events: none;
+}
+.entitiesWindow{
+    position: fixed;
+    background-color: #f5fafa;
+    top: 35%;
+    right: 5%;
+    display: none;
+    border: 1px solid #bbbbbb;
+    box-sizing: border-box;
+    padding: 10px;
+}
+.helperPanel{
+    width: 100%;
+}
+.quickButton{
+    margin-right: 4px;
+    cursor: pointer;
+}
