@@ -33,3 +33,12 @@ h5::before {
     margin-right: 4px;
     cursor: pointer;
 }
+.accordion-inner .control-group{
+	margin-bottom: 0px;	
+}
+.accordion-inner .control-group label{
+	display: inline-block;
+    margin-bottom: 0px;
+    width: 300px;
+}
+

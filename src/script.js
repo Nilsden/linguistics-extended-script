@@ -1,4 +1,9 @@
 var isOpen = false;
+var tagTypes = {
+    'single': 1,
+    'double': 2,
+    'variable': 3
+};
 
 var mainContainer = document.getElementById('main-container');
 var templateAccordion = document.getElementsByClassName('accordion-toggle')[0];
@@ -18,8 +23,21 @@ function handleFakeClick() {
 function markTheWord(e) {
     var selection = (template.value).substring(template.selectionStart, template.selectionEnd);
     let splitter = selection.length > 0 ? '|' : '';
-    let markedSelection = `[${selection}${splitter}${e.target.dataset.tag}]`;
+    var markedSelection = '';
 
+    switch (Number(e.target.dataset.tagType)) {
+        case tagTypes.single:
+            markedSelection = `${e.target.dataset.tag}${selection}`;
+            break;
+        case tagTypes.double:
+            markedSelection = `${e.target.dataset.tagLeft}${selection}${e.target.dataset.tagRight}`;
+            break;
+        case tagTypes.variable:
+            markedSelection = `[${selection}${splitter}${e.target.dataset.tag}]`;
+            break;
+        default:
+            break;
+    }
     let result = template.value.slice(0, template.selectionStart) +
         markedSelection +
         template.value.slice(template.selectionEnd, template.value.length);
@@ -27,12 +45,20 @@ function markTheWord(e) {
     template.value = result;
 }
 
-function createVariableButton(variable, description) {
+function createTagButton(tagType, description, left, right) {
     let item = document.createElement("a");
-    item.title = `${variable} — ${description}`;
-    item.dataset.tag = variable;
+    if (right) {
+        item.title = `${left}${right} — ${description}`;
+        item.dataset.tagLeft = left;
+        item.dataset.tagRight = right;
+        item.textContent = `[${left}${right}]`;
+    } else {
+        item.title = `"${left}" — ${description}`;
+        item.dataset.tag = left;
+        item.textContent = tagType === tagTypes.variable ? `[${createShortName(left)}]` : `[${left}]`;
+    }
+    item.dataset.tagType = tagType;
     item.className = 'quickButton';
-    item.textContent = `[${createShortName(variable)}]`;
     item.addEventListener('click', markTheWord);
     return item;
 }
@@ -82,14 +108,18 @@ function handleClick() {
 
         for (var i = 0, l = entitiesList.length; i < l; i++) {
             entitiesList[i].id = `ent${i}`;
+            entitiesList[i].insertAdjacentElement('beforebegin', createHR());
             helperWindow.appendChild(createEntityLink(i, entitiesList[i].textContent));
         }
     }
     helperWindow.style.display = 'block';
 }
 
+helperPanel.appendChild(createTagButton(tagTypes.double, 'кавычки', '«', '»'));
+helperPanel.appendChild(createTagButton(tagTypes.single, 'тире', '—'));
+
 for (var i = 0, l = variables.length; i < l; i++) {
-    let a = createVariableButton(variables[i].children[0].textContent, variables[i].children[1].textContent);
+    let a = createTagButton(tagTypes.variable, variables[i].children[1].textContent, variables[i].children[0].textContent);
     helperPanel.appendChild(a);
 }
 
