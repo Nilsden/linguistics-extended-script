@@ -1,0 +1,10 @@
+.saveWindow{
+    position: fixed;
+    background-color: #f5fafa;
+    top: 35%;
+    left: 1%;
+    display: block;
+    border: 1px solid #bbbbbb;
+    box-sizing: border-box;
+    padding: 10px;
+}

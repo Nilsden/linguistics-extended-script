@@ -1,5 +1,7 @@
+'use strict';
+
 var isOpen = false;
-var tagTypes = {
+const tagTypes = {
     'single': 1,
     'double': 2,
     'variable': 3
@@ -127,3 +129,32 @@ templateAccordion.addEventListener('click', handleClick);
 
 template.insertAdjacentElement('beforebegin', helperPanel);
 mainContainer.appendChild(helperWindow);
+
+// Кнопка вставки сохранённых проверочных шаблонов
+var checkStrings = [];
+
+for (var i = 0; i < 4; i++) {
+    let checkString = JSON.parse(localStorage.getItem("check" + i));
+    if (checkString) {
+        checkStrings.push(checkString);
+    }
+}
+
+function insertResults() {
+    checkStrings.forEach((item, index) => {
+        let checkTextarea = document.getElementById('id_verificator_' + index);
+        checkTextarea.value = item;
+    });
+}
+
+function createInsertButton() {
+    let insertButton = document.createElement("a");
+    insertButton.addEventListener('click', insertResults);
+    insertButton.textContent = '[Вставить]';
+    insertButton.className = 'quickButton';
+    return insertButton;
+}
+
+if (checkStrings.length === 4) {
+    helperPanel.appendChild(createInsertButton());
+}
