@@ -22,6 +22,10 @@ function handleFakeClick() {
     templateAccordion.click();
 }
 
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 function markTheWord(e) {
     var selection = (template.value).substring(template.selectionStart, template.selectionEnd);
     let splitter = selection.length > 0 ? '|' : '';
@@ -35,7 +39,10 @@ function markTheWord(e) {
             markedSelection = `${e.target.dataset.tagLeft}${selection}${e.target.dataset.tagRight}`;
             break;
         case tagTypes.variable:
-            markedSelection = `[${selection}${splitter}${e.target.dataset.tag}]`;
+            let tag = selection.length === 0 && template.selectionStart === 0 ?
+                capitalizeFirstLetter(e.target.dataset.tag) :
+                e.target.dataset.tag;
+            markedSelection = `[${selection}${splitter}${tag}]`;
             break;
         default:
             break;
